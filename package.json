@@ -1,0 +1,16 @@
+{
+  "name": "cligamespractice",
+  "version": "1.0.0",
+  "description": "This is a practice for CLI games creation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "fifteenPuzzle": "node fifteenPuzzle.js"
+  },
+  "author": "Jan",
+  "license": "ISC",
+  "dependencies": {
+    "inquirer": "^8.2.0",
+    "table": "^6.8.0"
+  }
+}
