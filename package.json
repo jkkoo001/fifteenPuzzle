@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "fifteenPuzzle": "node fifteenPuzzle.js"
+    "main": "node main.js"
   },
   "author": "Jan",
   "license": "ISC",
   "dependencies": {
-    "inquirer": "^8.2.0",
+    "clear-screen": "^1.0.0",
+    "prompt-sync": "^4.2.0",
+    "stringify": "^5.2.0",
     "table": "^6.8.0"
   }
 }
