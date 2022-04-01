@@ -11,70 +11,56 @@ const tiles = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "1
 
 class Puzzle {
 
-  puzzle = [];
+  puzzle = JSON.parse(JSON.stringify(tiles));
 
   constructor() {
-    for (let i = tiles.length - 1; i > 0; i--)
+    this.direction = "";
+
+    for (let i = this.puzzle.length - 1; i > 0; i--)
     {
       let j = Math.floor(Math.random() * i);
-      let k = tiles[i];
-      tiles[i] = tiles[j];
-      tiles[j] = k;
+      let k = this.puzzle[i];
+      this.puzzle[i] = this.puzzle[j];
+      this.puzzle[j] = k;
     }
-
-    this.puzzle = tiles;
-
     this.blankIndex = this.puzzle.indexOf("⠀");
-
   }
 
-
-
-  invalidMove() {
-    // const leftIndex = [3, 7, 11, 15];
-    // const rightIndex = [0, 4, 8, 12];
-
-    if (this.answer == "u" && this.blankIndex > 11) {
+  /* move blank
+  isValidMove() {
+    if (this.direction === "u" && this.blankIndex > 3) {
       return true;
     }
-    else if (this.answer == "d" && this.blankIndex < 4) {
+    else if (this.direction === "d" && this.blankIndex < 12) {
       return true;
     }
-    else if (this.answer == "l" && (this.blankIndex == 3 || this.blankIndex == 7 || this.blankIndex == 11 || this.blankIndex == 15)) {
+    else if (this.direction === "l" && (this.blankIndex != 0 || this.blankIndex != 4 || this.blankIndex != 8 || this.blankIndex != 12)) {
       return true;
     }
-    else if (this.answer == "r" && (this.blankIndex == 0 || this.blankIndex == 4 || this.blankIndex == 8 || this.blankIndex == 12)) {
+    else if (this.direction === "r" && (this.blankIndex != 3 || this.blankIndex != 7 || this.blankIndex != 11 || this.blankIndex != 15)) {
       return true;
     }
-  
-
-
-    // else if (this.answer == "l" && this.blankIndex == 3 || this.blankIndex == 7 || this.blankIndex == 11 || this.blankIndex == 15) {
-    //   return true;
-    // }
-    // else if (this.answer == "r" && this.blankIndex == 0 || this.blankIndex == 4 || this.blankIndex == 8 || this.blankIndex == 12) {
-    //   return true;
-    // }
-
-
-    // else if (this.answer == "l" && leftIndex.includes(this.blankIndex)) {
-    //   return true;
-    // }
-    // else if (this.answer == "r" && rightIndex.includes(this.blankIndex)) {
-    //   return true;
-    // }
-
-
-    // else if (this.answer == "l" && (this.blankIndex == 3 || this.blankIndex == 7 || this.blankIndex == 11 || this.blankIndex == 15)) {
-    //   return true;
-    // }
-
-    // else if (this.answer == "r" && (this.blankIndex == 0 || this.blankIndex == 4 || this.blankIndex == 8 || this.blankIndex == 12)) {
-    //   return true;
-    // }
-
     return false;
   }
+  */
+
+  //move tile
+  isValidMove() {
+    if (this.direction === "u" && this.blankIndex < 12) {
+      return true;
+    }
+    else if (this.direction === "d" && this.blankIndex > 3) {
+      return true;
+    }
+    else if (this.direction === "l" && (this.blankIndex != 3 || this.blankIndex != 7 || this.blankIndex != 11 || this.blankIndex != 15)) {
+      return true;
+    }
+    else if (this.direction === "r" && (this.blankIndex != 0 || this.blankIndex != 4 || this.blankIndex != 8 || this.blankIndex != 12)) {
+      return true;
+    }
+    return false;
+  }
+  
 
 
   updateState() {
@@ -98,22 +84,22 @@ class Puzzle {
     let continueGame = true;
     while (continueGame) {
       this.print();
-      //console.log(this.puzzle.indexOf("⠀"))
-      console.log(this.blankIndex);
-      //console.log(this.newIndex);
+      //console.log(this.blankIndex);
+      //console.log(tiles);
+      //console.log(this.puzzle);
       
-      this.promptUser();    
+      this.promptUser();
           
-      if (this.invalidMove()) {
-        console.log("Invalid Move!");
-        continueGame = false;
-      }
-      else {
+      if (this.isValidMove()) {
         this.updateState();
         if (this.isFinalState()) {
           this.finish();
           continueGame = false;
         }
+      }
+      else {
+        console.log("Invalid Move!");
+        continueGame = false;
       }
     }    
   } //End of startGame
@@ -123,33 +109,64 @@ class Puzzle {
   print() {
     clear();
 
-    //console.log(this.puzzle);
     const printTiles = [];
-    const copyTiles = [...this.puzzle];
+    const copyTiles = JSON.parse(JSON.stringify(this.puzzle));
     while(copyTiles.length > 0)
     {
       printTiles.push(copyTiles.splice(0,4));
     }
-    console.log(table(printTiles));
-    
-    
+    console.log(table(printTiles));    
   } //End of print
 
-
+  /* move blank
   promptUser() {
     const answer = prompt("Enter move direction: ").toLowerCase();
     switch (answer)
     {
       case "u":
+        this.direction = "u";
+        this.newIndex = this.blankIndex - 4;
+        break;
+      case "d":
+        this.direction = "d";
+        this.newIndex = this.blankIndex + 4;
+        break;
+      case "l":
+        this.direction = "l";
+        this.newIndex = this.blankIndex - 1;
+        break;
+      case "r":
+        this.direction = "r";
+        this.newIndex = this.blankIndex + 1;
+        break;
+      default:
+        console.log("Enter u, d, l or r ");
+        this.promptUser();
+    }
+    
+  }
+  */
+
+
+  //move tile
+  promptUser() {
+    const answer = prompt("Enter move direction: ").toLowerCase();
+    switch (answer)
+    {
+      case "u":
+        this.direction = "u";
         this.newIndex = this.blankIndex + 4;
         break;
       case "d":
+        this.direction = "d";
         this.newIndex = this.blankIndex - 4;
         break;
       case "l":
+        this.direction = "l";
         this.newIndex = this.blankIndex + 1;
         break;
       case "r":
+        this.direction = "r";
         this.newIndex = this.blankIndex - 1;
         break;
       default:
@@ -158,7 +175,6 @@ class Puzzle {
     }
     
   } //End of promptUser
-
 
 
 } //End of Puzzle Class
@@ -177,27 +193,6 @@ myPuzzle.startGame();
 
 
 
-
-
-
-// const tiles = ['', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]; 
-
-// const randTiles = () => {
-//   for (let i = tiles.length - 1; i > 0; i--) {
-//     let j = Math.floor(Math.random() * i);
-//     let k = tiles[i];
-//     tiles[i] = tiles[j];
-//     tiles[j] = k;
-//   }
-// };
-
-// randTiles();
-
-// const nTiles = [];
-// while(tiles.length > 0) {
-// 	nTiles.push(tiles.splice(0,4));
-// }
-// console.log(table(nTiles));
 
 
 
